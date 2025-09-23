@@ -276,38 +276,7 @@
                 </div>
             </div>
 
-            <!-- Example of how to add additional dashboards -->
-            <!-- Uncomment and modify URL to add more dashboards -->
-            <!--
-            <div class="dashboard-container">
-                <div class="dashboard-title">
-                    Secondary Dashboard
-                </div>
-                <div class="iframe-wrapper">
-                    <div class="loading-overlay" id="loading-dashboard-2">
-                        <div class="loading-spinner"></div>
-                        <p>Loading dashboard...</p>
-                    </div>
-                    <iframe 
-                        id="dashboard-2"
-                        class="dashboard-iframe"
-                        src="YOUR_SECOND_DASHBOARD_URL_HERE"
-                        title="Google Looker Studio Dashboard - Secondary Analytics"
-                        loading="lazy"
-                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                        onload="hideLoading('dashboard-2')"
-                        onerror="showError('dashboard-2')">
-                    </iframe>
-                    <div class="error-message" id="error-dashboard-2">
-                        <h3>Unable to load dashboard</h3>
-                        <p>Please ensure the dashboard is shared with "Anyone with the link can view" permissions.</p>
-                        <button onclick="refreshDashboard('dashboard-2')" class="btn" style="margin-top: 12px;">
-                            Try Again
-                        </button>
-                    </div>
-                </div>
-            </div>
-            -->
+            
         </div>
     </div>
 
@@ -376,6 +345,26 @@
                 event.preventDefault();
                 window.open('https://lookerstudio.google.com/embed/reporting/42249269-77a3-4a4b-b41b-cb88b37f9f54/page/5Q5YF', '_blank');
             }
+        });
+
+        // Auto-refresh iframe every hour (3600000 milliseconds)
+        let autoRefreshInterval;
+        
+        function startAutoRefresh() {
+            // Clear any existing interval
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // Set up auto-refresh every hour
+            autoRefreshInterval = setInterval(function() {
+                refreshDashboard('dashboard-1');
+            }, 3600000); // 1 hour = 3600000 milliseconds
+        }
+        
+        // Start auto-refresh when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            startAutoRefresh();
         });
 
         // Handle window resize for responsive behavior
