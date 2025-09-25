@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Analytics</title>
+    <title>Capacity Dashboard</title>
+    <link rel="icon" href="Basilur.png" type="image/png">
+    <link rel="apple-touch-icon" href="Basilur.png">
     <style>
         * {
             margin: 0;
@@ -117,6 +119,17 @@
             align-items: center;   /* Vertical center */
             justify-content: center; /* Horizontal center */
             text-align: center;
+        }
+
+        .dashboard-title img {
+            height: 20px;
+            width: auto;
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        .dashboard-title .title-text {
+            display: inline-block;
         }
 
         .iframe-wrapper {
@@ -256,7 +269,8 @@
         <div class="dashboard-grid">
             <div class="dashboard-container">
                 <div class="dashboard-title">
-                    CAPACITY MANAGMENT DASHBOARD
+                    <img src="Basilur.png" alt="Logo">
+                    <span class="title-text">CAPACITY MANAGMENT DASHBOARD</span>
                 </div>
                 <div class="iframe-wrapper">
                     <div class="loading-overlay" id="loading-dashboard-1">
