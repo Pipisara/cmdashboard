@@ -150,19 +150,27 @@
             color: #e2e8f0;
         }
 
-        .loading-spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid #334155;
-            border-top: 4px solid #4f46e5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .loading-logo {
+            width: 132px;
+            height: 103px;
             margin-bottom: 16px;
+            animation: glow 2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes glow {
+            0% {
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4)) 
+                        drop-shadow(0 0 20px rgba(255, 215, 0, 0.2))
+                        drop-shadow(0 0 30px rgba(255, 215, 0, 0.1));
+                transform: scale(1);
+            }
+            100% {
+                filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) 
+                        drop-shadow(0 0 40px rgba(255, 215, 0, 0.4))
+                        drop-shadow(0 0 60px rgba(255, 215, 0, 0.2));
+                transform: scale(1.05);
+            }
         }
 
         .error-message {
@@ -252,7 +260,7 @@
                 </div>
                 <div class="iframe-wrapper">
                     <div class="loading-overlay" id="loading-dashboard-1">
-                        <div class="loading-spinner"></div>
+                        <img src="Basilur.png" alt="Basilur Logo" class="loading-logo">
                         <p>Loading dashboard...</p>
                     </div>
                     <iframe 
