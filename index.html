@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +19,44 @@
             min-height: 100vh;
             padding: 20px;
             color: #e2e8f0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(79, 70, 229, 0.8);
+            border-radius: 50%;
+            animation: float-up linear infinite;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.6),
+                        0 0 20px rgba(79, 70, 229, 0.4);
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--drift));
+                opacity: 0;
+            }
         }
 
         .container {
@@ -30,6 +67,8 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             border: 1px solid #334155;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
@@ -114,10 +153,9 @@
             font-weight: 600;
             font-size: 14px;
             border-bottom: 1px solid #334155;
-
-	    display: flex;
-            align-items: center;   /* Vertical center */
-            justify-content: center; /* Horizontal center */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
         }
 
@@ -220,14 +258,12 @@
             }
 
             .dashboard-iframe {
-    	        width: 100%;
-   	        height: 1000px; /* adjust this until full dashboard fits */
-    		border: none;
-    		border-radius: 0 0 8px 8px;
-    		background: #0f172a;
-    
-		}
-
+                width: 100%;
+                height: 1000px;
+                border: none;
+                border-radius: 0 0 8px 8px;
+                background: #0f172a;
+            }
 
             .iframe-wrapper {
                 height: 60vh;
@@ -265,44 +301,89 @@
     </style>
 </head>
 <body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles-container"></div>
     
-        <div class="dashboard-grid">
-            <div class="dashboard-container">
-                <div class="dashboard-title">
-                    <img src="Basilur.png" alt="Logo">
-                    <span class="title-text">CAPACITY MANAGMENT DASHBOARD</span>
+    <div class="dashboard-grid">
+        <div class="dashboard-container">
+            <div class="dashboard-title">
+                <img src="Basilur.png" alt="Logo">
+                <span class="title-text">CAPACITY MANAGMENT DASHBOARD</span>
+            </div>
+            <div class="iframe-wrapper">
+                <div class="loading-overlay" id="loading-dashboard-1">
+                    <img src="Basilur.png" alt="Basilur Logo" class="loading-logo">
+                    <p>Loading dashboard...</p>
                 </div>
-                <div class="iframe-wrapper">
-                    <div class="loading-overlay" id="loading-dashboard-1">
-                        <img src="Basilur.png" alt="Basilur Logo" class="loading-logo">
-                        <p>Loading dashboard...</p>
-                    </div>
-                    <iframe 
-                        id="dashboard-1"
-                        class="dashboard-iframe"
-                        src="https://lookerstudio.google.com/embed/reporting/42249269-77a3-4a4b-b41b-cb88b37f9f54/page/5Q5YF"
-                        title="Google Looker Studio Dashboard - Primary Analytics"
-                        loading="lazy"
-                        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                        allowfullscreen
-                        onload="hideLoading('dashboard-1')"
-                        onerror="showError('dashboard-1')">
-                    </iframe>
-                    <div class="error-message" id="error-dashboard-1">
-                        <h3>Unable to load dashboard</h3>
-                        <p>Please ensure the dashboard is shared with "Anyone with the link can view" permissions.</p>
-                        <button onclick="refreshDashboard('dashboard-1')" class="btn" style="margin-top: 12px;">
-                            Try Again
-                        </button>
-                    </div>
+                <iframe 
+                    id="dashboard-1"
+                    class="dashboard-iframe"
+                    src="https://lookerstudio.google.com/embed/reporting/42249269-77a3-4a4b-b41b-cb88b37f9f54/page/5Q5YF"
+                    title="Google Looker Studio Dashboard - Primary Analytics"
+                    loading="lazy"
+                    sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                    allowfullscreen
+                    onload="hideLoading('dashboard-1')"
+                    onerror="showError('dashboard-1')">
+                </iframe>
+                <div class="error-message" id="error-dashboard-1">
+                    <h3>Unable to load dashboard</h3>
+                    <p>Please ensure the dashboard is shared with "Anyone with the link can view" permissions.</p>
+                    <button onclick="refreshDashboard('dashboard-1')" class="btn" style="margin-top: 12px;">
+                        Try Again
+                    </button>
                 </div>
             </div>
-
-            
         </div>
     </div>
 
     <script>
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles-container');
+            const numberOfParticles = 50;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 3px and 8px (larger)
+                const size = Math.random() * 5 + 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random horizontal position
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // Random starting position (start from bottom of screen)
+                particle.style.bottom = `${Math.random() * -100}px`;
+                
+                // Random animation duration between 15s and 30s
+                const duration = Math.random() * 15 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay to stagger animations
+                const delay = Math.random() * 10;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // Random horizontal drift
+                const drift = (Math.random() - 0.5) * 100;
+                particle.style.setProperty('--drift', `${drift}px`);
+                
+                // Higher opacity range
+                const opacity = Math.random() * 0.5 + 0.4;
+                particle.style.background = `rgba(79, 70, 229, ${opacity})`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize particles when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            startAutoRefresh();
+        });
+
         // Hide loading overlay when iframe loads successfully
         function hideLoading(dashboardId) {
             const loadingOverlay = document.getElementById('loading-' + dashboardId);
@@ -312,7 +393,7 @@
                     setTimeout(() => {
                         loadingOverlay.style.display = 'none';
                     }, 300);
-                }, 1000); // Small delay to ensure content is loaded
+                }, 1000);
             }
         }
 
@@ -381,13 +462,8 @@
             // Set up auto-refresh every hour
             autoRefreshInterval = setInterval(function() {
                 refreshDashboard('dashboard-1');
-            }, 3600000); // 1 hour = 3600000 milliseconds
+            }, 3600000);
         }
-        
-        // Start auto-refresh when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            startAutoRefresh();
-        });
 
         // Handle window resize for responsive behavior
         let resizeTimeout;
